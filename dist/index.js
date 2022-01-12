@@ -4,6 +4,7 @@
 /***/ 8675:
 /***/ ((module) => {
 
+// todo: get from somewhere
 const state = {
     higher: 1,
     lower: 20
@@ -15,6 +16,7 @@ const complexityLevels = {
     High: 2
 }
 
+// todo: get from somewhere
 const reviewers = [
     { username: 'higher', complexity: complexityLevels.High },
     { username: 'medium', complexity: complexityLevels.Medium },
@@ -8545,14 +8547,13 @@ const complexity = {
 }
 
 try {
-    // `who-to-greet` input defined in action metadata file
     const amountOfReviewers = core.getInput('amount-of-reviewers');
     const reviewComplexity = core.getInput('review-complexity');
     const c = complexity[reviewComplexity] || 1;
     console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
     const reviewers = chooser(c, amountOfReviewers);
-    console.log('')
-    core.setOutput("reviewers", reviewers);
+    console.log(`Chosen reviewers: ${reviewers}`);
+    core.setOutput("reviewers", reviewers.join(','));
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);

@@ -14,8 +14,8 @@ try {
     const c = complexity[reviewComplexity] || 1;
     console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
     const reviewers = chooser(c, amountOfReviewers);
-    console.log('')
-    core.setOutput("reviewers", reviewers);
+    console.log(`Chosen reviewers: ${reviewers}`);
+    core.setOutput("reviewers", reviewers.join(','));
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
