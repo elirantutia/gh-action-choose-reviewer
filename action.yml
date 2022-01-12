@@ -1,0 +1,17 @@
+name: 'Reviewers Chooser'
+description: 'Chooser reviewers automatically to PR'
+inputs:
+  amount-of-reviewers:
+    description: 'Amount of reviewers'
+    required: false
+    default: '2'
+  review-complexity:
+    description: 'The complexity of the PR to review'
+    required: true
+    default: 'medium'
+outputs:
+  reviewers:
+    description: 'List of chosen usernames to review the PR'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
