@@ -52,6 +52,7 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
         await octokit.rest.pulls.requestReviewers(params);
 
     } catch (error) {
+        console.log(error);
         core.setFailed(error.message);
     }
 })();

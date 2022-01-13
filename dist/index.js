@@ -15217,6 +15217,7 @@ const { chooseReviewer, complexityLevels } = __nccwpck_require__(8675);
         await octokit.rest.pulls.requestReviewers(params);
 
     } catch (error) {
+        console.log(error);
         core.setFailed(error.message);
     }
 })();
