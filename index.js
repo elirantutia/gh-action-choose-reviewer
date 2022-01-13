@@ -17,7 +17,7 @@ try {
     const reviewers = chooseReviewer(c, amountOfReviewers);
     console.log(`Chosen reviewers: ${reviewers.map(r => r.username)}`);
 
-    const octokit = new github.getOctokit(token);
+    const octokit = github.getOctokit(token);
     const context = github.context;
 
     if (context.payload.pull_request == null) {
