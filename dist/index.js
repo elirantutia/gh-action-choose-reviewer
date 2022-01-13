@@ -37,7 +37,7 @@ function chooseReviewer(reviewersPoll, complexity, amountOfReviewers, prevChosen
 
     prevChosen = prevChosen.concat(sorted)
 
-    if (prevChosen.length < amountOfReviewers && complexity === complexityLevels.Low) {
+    if (prevChosen.length < amountOfReviewers && complexity === complexityLevels.low) {
         console.log(`Cant find enough reviewers (${amountOfReviewers}), will return ${prevChosen.length} reviewers.`);
         return prevChosen;
     } else if (prevChosen.length < amountOfReviewers) {
