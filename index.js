@@ -25,8 +25,8 @@ try {
         return;
     }
 
-    console.log('octokit', octokit);
-    console.log('context', context);
+    // console.log('octokit', octokit);
+    // console.log('context', context);
 
     const pullRequestNumber = context.payload.pull_request.number;
     const params = {
@@ -38,5 +38,6 @@ try {
     octokit.pulls.requestReviewers(params);
 
 } catch (error) {
+    console.log(error);
     core.setFailed(error.message);
 }
