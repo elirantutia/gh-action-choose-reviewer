@@ -9,6 +9,9 @@ inputs:
     description: 'The complexity of the PR to review'
     required: true
     default: 'medium'
+  token:
+    description: 'GitHub token'
+    required: true
 
 runs:
   using: 'node16'
