@@ -42,7 +42,7 @@ function chooseReviewer(reviewersPoll, complexity, amountOfReviewers, prevChosen
         return prevChosen;
     } else if (prevChosen.length < amountOfReviewers) {
         console.log(`Found only ${prevChosen.length} reviewers, will try to find more reviewers by changing the complexity from ${complexity} to ${complexity - 1}`);
-        return chooseReviewer(complexity - 1, amountOfReviewers, prevChosen);
+        return chooseReviewer(reviewersPoll, complexity - 1, amountOfReviewers, prevChosen);
     }
 
     return prevChosen.slice(0, amountOfReviewers);
