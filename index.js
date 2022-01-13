@@ -25,6 +25,9 @@ try {
         return;
     }
 
+    console.log('octokit', octokit);
+    console.log('context', context);
+
     const pullRequestNumber = context.payload.pull_request.number;
     const params = {
         ...context.repo,
