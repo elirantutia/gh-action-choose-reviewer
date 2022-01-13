@@ -23,6 +23,8 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
             return;
         }
 
+        console.log('context.actor', context);
+
         const { data: response_body } = await octokit.rest.repos.getContent({
             owner: context.repo.owner,
             repo: context.repo.repo,

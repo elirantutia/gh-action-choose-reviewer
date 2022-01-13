@@ -15188,6 +15188,8 @@ const { chooseReviewer, complexityLevels } = __nccwpck_require__(8675);
             return;
         }
 
+        console.log('context.actor', context);
+
         const { data: response_body } = await octokit.rest.repos.getContent({
             owner: context.repo.owner,
             repo: context.repo.repo,
