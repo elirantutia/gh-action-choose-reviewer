@@ -33,7 +33,7 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
         const configContent = Buffer.from(response_body.content, response_body.encoding).toString();
         const config =  yaml.parse(configContent);
 
-        console.log('reviewersPoll', config);
+        console.log('config.reviewers', config.reviewers);
 
         const c = complexityLevels[reviewComplexity] || 1;
         console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
