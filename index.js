@@ -31,16 +31,15 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
         });
 
         const configContent = Buffer.from(response_body.content, response_body.encoding).toString();
-        const reviewersPoll =  yaml.parse(configContent);
+        const config =  yaml.parse(configContent);
 
-        console.log('reviewersPoll', reviewersPoll);
+        console.log('reviewersPoll', config);
 
         const c = complexityLevels[reviewComplexity] || 1;
         console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
 
-        const reviewers = chooseReviewer(reviewersPoll, c, amountOfReviewers);
+        const reviewers = chooseReviewer(config.reviewers, c, amountOfReviewers);
         console.log(`Chosen reviewers: ${reviewers.map(r => r.username)}`);
-
 
         const pullRequestNumber = context.payload.pull_request.number;
         const params = {
