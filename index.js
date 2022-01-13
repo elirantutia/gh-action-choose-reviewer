@@ -23,8 +23,6 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
             return;
         }
 
-        console.log('context.actor', context);
-
         const { data: response_body } = await octokit.rest.repos.getContent({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -36,11 +34,19 @@ const { chooseReviewer, complexityLevels } = require('./lib/chooser');
         const config =  yaml.parse(configContent);
 
         console.log('config.reviewers', config.reviewers);
+        console.log(`Deleting author '${context.actor}' from poll`)
+        const reviewersPoll = config.reviewers.filter(r => r.username !== context.actor);
 
         const c = complexityLevels[reviewComplexity] || 1;
         console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
 
-        const reviewers = chooseReviewer(config.reviewers, c, amountOfReviewers);
+        const reviewers = chooseReviewer(reviewersPoll, c, amountOfReviewers);
+
+        if (!reviewers.length) {
+            console.log('No reviewers to assign!');
+            return;
+        }
+
         console.log(`Chosen reviewers: ${reviewers.map(r => r.username)}`);
 
         const pullRequestNumber = context.payload.pull_request.number;
