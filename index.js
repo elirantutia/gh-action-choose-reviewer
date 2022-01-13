@@ -36,6 +36,7 @@ try {
     };
 
     console.log('octokit.pulls', octokit.pulls);
+    console.log('octokit', octokit);
     octokit.pulls.requestReviewers(params);
 
 } catch (error) {
