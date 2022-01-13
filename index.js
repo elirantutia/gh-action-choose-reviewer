@@ -1,24 +1,38 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const chooser = require('./lib/chooser');
-
-const complexity = {
-    low: 0,
-    medium: 1,
-    high: 2
-}
+const { chooseReviewer, complexityLevels } = require('./lib/chooser');
 
 try {
-    const amountOfReviewers = core.getInput('amount-of-reviewers');
+    const amountOfReviewers = core.getInput('amount-of-reviewers') || 2;
     const reviewComplexity = core.getInput('review-complexity');
-    const c = complexity[reviewComplexity] || 1;
+    const token = core.getInput("token");
+
+    if (!token) {
+        core.setFailed("Input 'token' is required.");
+        return;
+    }
+
+    const c = complexityLevels[reviewComplexity] || 1;
     console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
-    const reviewers = chooser(c, amountOfReviewers);
-    console.log(`Chosen reviewers: ${reviewers}`);
-    core.setOutput("reviewers", reviewers.join(','));
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    const reviewers = chooseReviewer(c, amountOfReviewers);
+    console.log(`Chosen reviewers: ${reviewers.map(r => r.username)}`);
+
+    const octokit = new github.getOctokit(token);
+    const context = github.context;
+
+    if (context.payload.pull_request == null) {
+        core.setFailed("Pull request not found");
+        return;
+    }
+
+    const pullRequestNumber = context.payload.pull_request.number;
+    const params = {
+        ...context.repo,
+        pull_number: pullRequestNumber,
+        reviewers,
+    };
+
+    octokit.pulls.requestReviewers(params);
 } catch (error) {
     core.setFailed(error.message);
 }

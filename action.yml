@@ -9,9 +9,7 @@ inputs:
     description: 'The complexity of the PR to review'
     required: true
     default: 'medium'
-outputs:
-  reviewers:
-    description: 'List of chosen usernames to review the PR'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'

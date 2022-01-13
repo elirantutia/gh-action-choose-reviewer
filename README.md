@@ -1,6 +1,6 @@
-# Hello world javascript action
+# PR Reviewers Chooser
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+This action choose PR reviewers according to amount of reviewers and PR complexity.
 
 ## Inputs
 
@@ -13,12 +13,9 @@ This action prints "Hello World" or "Hello" + the name of a person to greet to t
 **Required** The complexity of the PR to review. Default `medium`.
 Values: `high`, `medium`, `low`.
 
+## `token`
+**Required** GitHub token.
 
-## Outputs
-
-## `reviewers`
-
-List of chosen usernames to review the PR
 
 ## Example usage
 

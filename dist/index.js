@@ -11,16 +11,15 @@ const state = {
 }
 
 const complexityLevels = {
-    Low: 0,
-    Medium: 1,
-    High: 2
+    low: 0,
+    medium: 1,
+    high: 2
 }
 
 // todo: get from somewhere
 const reviewers = [
-    { username: 'higher', complexity: complexityLevels.High },
-    { username: 'medium', complexity: complexityLevels.Medium },
-    { username: 'lower', complexity: complexityLevels.Low }
+    { username: 'ShirSIron', complexity: complexityLevels.high },
+    { username: 'elirantutia', complexity: complexityLevels.medium }
 ];
 
 function chooseReviewer(complexity, amountOfReviewers, prevChosen = []) {
@@ -49,7 +48,7 @@ function chooseReviewer(complexity, amountOfReviewers, prevChosen = []) {
         return prevChosen;
     } else if (prevChosen.length < amountOfReviewers) {
         console.log(`Found only ${prevChosen.length} reviewers, will try to find more reviewers by changing the complexity from ${complexity} to ${complexity - 1}`);
-        return chooseReviewer(complexity - 1, 3, prevChosen);
+        return chooseReviewer(complexity - 1, amountOfReviewers, prevChosen);
     }
 
     return prevChosen.slice(0, amountOfReviewers);
@@ -69,13 +68,16 @@ function chooseReviewer(complexity, amountOfReviewers, prevChosen = []) {
 //     console.log('Updating state... Done!')
 // }
 //
-// const chosenReviewers = chooseReviewer(complexityLevels.High, 3);
+// const chosenReviewers = chooseReviewer(complexityLevels.High, 2);
 // console.log('=========')
 // console.log(chosenReviewers)
 // updateState(chosenReviewers);
 // console.log(state)
 
-module.exports = chooseReviewer;
+module.exports = {
+    chooseReviewer,
+    complexityLevels
+};
 
 // async function run() {
 //     const doc = new GoogleSpreadsheet('11U0daSNL-gvomKoA9zn7G3CDZkLl5MTRmwJNVRqCjc0');
@@ -8538,25 +8540,39 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(5152);
 const github = __nccwpck_require__(3325);
-const chooser = __nccwpck_require__(8675);
-
-const complexity = {
-    low: 0,
-    medium: 1,
-    high: 2
-}
+const { chooseReviewer, complexityLevels } = __nccwpck_require__(8675);
 
 try {
-    const amountOfReviewers = core.getInput('amount-of-reviewers');
+    const amountOfReviewers = core.getInput('amount-of-reviewers') || 2;
     const reviewComplexity = core.getInput('review-complexity');
-    const c = complexity[reviewComplexity] || 1;
+    const token = core.getInput("token");
+
+    if (!token) {
+        core.setFailed("Input 'token' is required.");
+        return;
+    }
+
+    const c = complexityLevels[reviewComplexity] || 1;
     console.log(`Choosing ${amountOfReviewers} reviewers with complexity of ${c}`);
-    const reviewers = chooser(c, amountOfReviewers);
-    console.log(`Chosen reviewers: ${reviewers}`);
-    core.setOutput("reviewers", reviewers.join(','));
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    const reviewers = chooseReviewer(c, amountOfReviewers);
+    console.log(`Chosen reviewers: ${reviewers.map(r => r.username)}`);
+
+    const octokit = new github.getOctokit(token);
+    const context = github.context;
+
+    if (context.payload.pull_request == null) {
+        core.setFailed("Pull request not found");
+        return;
+    }
+
+    const pullRequestNumber = context.payload.pull_request.number;
+    const params = {
+        ...context.repo,
+        pull_number: pullRequestNumber,
+        reviewers,
+    };
+
+    octokit.pulls.requestReviewers(params);
 } catch (error) {
     core.setFailed(error.message);
 }
