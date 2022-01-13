@@ -9,9 +9,9 @@ inputs:
     description: 'The complexity of the PR to review'
     required: true
     default: 'medium'
-outputs:
-  reviewers:
-    description: 'Reviewers to be assigned'
+  token:
+    description: 'GitHub token'
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
