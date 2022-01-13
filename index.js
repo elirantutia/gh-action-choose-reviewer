@@ -35,6 +35,7 @@ try {
         reviewers: reviewers.map(r => r.username),
     };
 
+    console.log('octokit.pulls', octokit.pulls);
     octokit.pulls.requestReviewers(params);
 
 } catch (error) {
