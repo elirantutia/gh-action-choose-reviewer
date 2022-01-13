@@ -13,8 +13,8 @@ This action choose PR reviewers according to amount of reviewers and PR complexi
 **Required** The complexity of the PR to review. Default `medium`.
 Values: `high`, `medium`, `low`.
 
-## `token`
-**Required** GitHub token.
+## Output
+## `reviewers`
 
 
 ## Example usage
